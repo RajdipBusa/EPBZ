@@ -1,0 +1,74 @@
+﻿@using Model
+@{
+    ViewData["Title"] = "View Application";
+}
+@model List<Application>
+
+<div class="w-100 text-center mb-4">
+    <h4>Application List</h4>
+</div>
+<div class="mb-3">
+    <input id="tblCustomSearchBox" class="form-control" placeholder="Search">
+</div>
+<div class="table-responsive">
+    <table id="tblApplicationData" class="table align-items-center w-100">
+        <thead style="background-color:#EFEFF7">
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Gender</th>
+                <th>Contact</th>
+                <th>Preferred Location</th>
+                <th>ECTC</th>
+                <th>CCTC</th>
+                <th>Notice Period (days)</th>
+                <th style="background-color:#EFEFF7;" class="text-center border-start">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Count > 0)
+            {
+                foreach (Application application in Model)
+                {
+                    <tr>
+                        <td>@application.Name</td>
+                        <td>@application.Email</td>
+                        <td>@application.Address</td>
+                        <td>@if (application.Gender)
+                            {
+                                <span>Female</span>
+                            }
+                            else
+                            {
+                                <span>Male</span>
+                            }
+                        </td>
+                        <td>@application.Contact</td>
+                        <td>@application.PreferredLocation</td>
+                        <td>@application.ECTC</td>
+                        <td>@application.CCTC</td>
+                        <td>@application.Notice</td>
+                        <td class="bg-white text-center border-start">
+                            <div class="d-flex">
+                                <a class="btn btn-success" asp-action="EditApplication" asp-controller="ApplicationForm" asp-route-appId="@application.Id">Edit</a>
+                                <button class="ms-3 btn btn-danger" onclick="deleteApplication(@application.Id)">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/fixedcolumns/4.1.0/js/dataTables.fixedColumns.min.js"></script>
+    <script src="~/js/viewapplication.js"></script>
+}
+@section Styles
+{
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+}

@@ -1,0 +1,456 @@
+﻿@using Model
+@{
+    ViewData["Title"] = "Application Form";
+}
+@model AddApplicationModel
+<div class="container">
+    <div class="w-100 text-center">
+        <h4>Application Form</h4>
+    </div>
+    <div class="w-100 mb-3">
+        <div>
+            <h5>Basic Details</h5>
+        </div>
+        <hr />
+        <input type="hidden" id="inpApplicationId" asp-for="application.Id" />
+        <div class="mb-3">
+            <div>
+                <label>Name</label>
+            </div>
+            <div>
+                <input asp-for="application.Name" class="form-control" type="text" placeholder="Name" id="inpName" />
+            </div>
+            <span class="text-danger" id="errorName"></span>
+        </div>
+        <div class="mb-3">
+            <div>
+                <label>Email Address</label>
+            </div>
+            <div>
+                <input class="form-control" asp-for="application.Email" placeholder="Email Address" type="email" id="inpEmail" />
+            </div>
+            <span class="text-danger" id="errorEmail"></span>
+        </div>
+        <div class="mb-3">
+            <div>
+                <label>Address</label>
+            </div>
+            <div>
+                <textarea class="form-control" id="inpAddress" asp-for="application.Address"></textarea>
+            </div>
+            <span class="text-danger" id="errorAddress"></span>
+        </div>
+        <div class="mb-3">
+            <div>
+                <label>Gender</label>
+            </div>
+            <div class="d-flex align-items-center">
+                <div>Male</div>
+                <div class="ms-2 mt-1">
+                    <input type="radio" value="false" name="gender" checked asp-for="application.Gender" />
+                </div>
+                <div class="ms-4">Female</div>
+                <div class="ms-2 mt-1">
+                    <input type="radio" value="true" name="gender" asp-for="application.Gender" />
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <div>
+                <label>Contact</label>
+            </div>
+            <div>
+                <input class="form-control" type="text" placeholder="Contact" id="inpContact" asp-for="application.Contact" />
+            </div>
+            <span class="text-danger" id="errorContact"></span>
+        </div>
+    </div>
+    <div class="w-100 mb-3">
+        <div>
+            <h5>Education Details</h5>
+        </div>
+        <hr />
+        <div class="mb-3">
+            <div id="divEducationDetails">
+                @if (Model?.educations != null)
+                {
+                    foreach (Education education in Model.educations)
+                    {
+                        <div class="d-flex flex-wrap justify-content-between educationDetailsContainer mb-3">
+                            <div class="mx-2 flex-grow-1">
+                                <div>
+                                    <label>Board/University</label>
+                                </div>
+                                <div>
+                                    <input value="@education.Board" type="text" class="form-control inpBoardUniversity" placeholder="Board/University" />
+                                </div>
+                            </div>
+                            <div class="mx-2">
+                                <div>
+                                    <label>Year</label>
+                                </div>
+                                <div>
+                                    <input type="number" value="@education.Year" class="form-control inpYear" placeholder="Year" />
+                                </div>
+                            </div>
+                            <div class="mx-2">
+                                <div>
+                                    <label>CGPA/Percentage</label>
+                                </div>
+                                <div>
+                                    <input value="@education.CGPA" type="text" class="form-control inpCGPA" placeholder="CGPA/Percentage" />
+                                </div>
+                            </div>
+                            <div class="mx-2">
+                                <div>
+                                    <label style="visibility:hidden;">-</label>
+                                </div>
+                                <div>
+                                    <button type="button" class="btn btn-danger" onclick="removeEducationDetailsContainer(this)">Delete</button>
+                                </div>
+                            </div>
+                            <div class="w-100">
+                                <span class="text-danger"></span>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+            <div class="mt-3">
+                <button type="button" class="btn btn-primary" onclick="addEducationDetails()">
+                    Add Education
+                </button>
+            </div>
+            <span class="text-danger" id="errorEducationDetails"></span>
+        </div>
+    </div>
+    <div class="w-100 mb-3">
+        <div>
+            <h5>Work Experience</h5>
+        </div>
+        <hr />
+        <div class="mb-3">
+            <div id="divWorkExperience">
+                @if (Model?.works != null)
+                {
+                    foreach (Work work in Model.works)
+                    {
+                        <div class="d-flex flex-wrap justify-content-between workExperienceContainer mb-3">
+                            <div class="mx-2 flex-grow-1">
+                                <div>
+                                    <label>Company</label>
+                                </div>
+                                <div>
+                                    <input type="text" value="@work.Company" class="form-control inpWorkCompany" placeholder="Company" />
+                                </div>
+                            </div>
+                            <div class="mx-2">
+                                <div>
+                                    <label>Designation</label>
+                                </div>
+                                <div>
+                                    <input type="text" value="@work.Designation" class="form-control inpWorkDesignation" placeholder="Designation" />
+                                </div>
+                            </div>
+                            <div class="mx-2">
+                                <div>
+                                    <label>From</label>
+                                </div>
+                                <div>
+                                    <input type="date" value="@(work.FromDate.Value.ToString("yyyy-MM-dd"))" class="form-control inpWorkFrom" />
+                                </div>
+                            </div>
+                            <div class="mx-2">
+                                <div>
+                                    <label>To</label>
+                                </div>
+                                <div>
+                                    <input type="date" value="@(work.ToDate.Value.ToString("yyyy-MM-dd"))" class="form-control inpWorkTo" />
+                                </div>
+                            </div>
+                            <div class="mx-2">
+                                <div>
+                                    <label style="visibility:hidden;">-</label>
+                                </div>
+                                <div>
+                                    <button type="button" class="btn btn-danger" onclick="removeWorkExperienceContainer(this)">Delete</button>
+                                </div>
+                            </div>
+                            <div class="w-100">
+                                <span class="text-danger"></span>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+            <div class="mt-3">
+                <button type="button" class="btn btn-primary" onclick="addWorkExperience()">
+                    Add Work Experience
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="w-100 mb-3">
+        <div>
+            <h5>Known Languages</h5>
+        </div>
+        <hr />
+        <div>
+            @{
+                List<string> languages = new()
+            {
+            "Hindi",
+            "English",
+            "Gujarati"
+            };
+
+                for (int i = 0; i < languages.Count; i++)
+                {
+                    string language = languages[i];
+
+                    Language? objLan = Model?.languages?.FirstOrDefault(x => x.LanguageName.ToLower() == language.ToLower());
+                    <div class="row languagesContainer" language-con="@language" lan-index-con="@i">
+                        <div class="col d-flex align-items-center">
+                            <div>
+                                <input @(objLan != null ? "checked" : "") type="checkbox" id="@("cbLan" + i + language)" onchange="languageChange(@i,'@language',this)" />
+                            </div>
+                            <div class="ms-2">
+                                @language
+                            </div>
+                        </div>
+                        <div class="col d-flex align-items-center">
+                            <div>
+                                <input @(objLan?.CanRead == true ? "checked" : "") @(objLan != null ? "" : "disabled") type="checkbox" id="@("cbReadLan" + i + language)" language="@language" lan-index="@i" />
+                            </div>
+                            <div class="ms-2">
+                                Read
+                            </div>
+                        </div>
+                        <div class="col d-flex align-items-center">
+                            <div>
+                                <input @(objLan?.CanWrite == true ? "checked" : "") @(objLan != null ? "" : "disabled") type="checkbox" id="@("cbWriteLan" + i + language)" language="@language" lan-index="@i" />
+                            </div>
+                            <div class="ms-2">
+                                Write
+                            </div>
+                        </div>
+                        <div class="col d-flex align-items-center">
+                            <div>
+                                <input @(objLan?.CanSpeak == true ? "checked" : "") @(objLan != null ? "" : "disabled") type="checkbox" id="@("cbSpeakLan" + i + language)" language="@language" lan-index="@i" />
+                            </div>
+                            <div class="ms-2">
+                                Speak
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <div class="w-100 mb-3">
+        <div>
+            <h5>Technical Experience</h5>
+        </div>
+        <hr />
+        <div>
+            @{
+                List<string> technologies = new()
+            {
+            "PHP",
+            "MySql",
+            "Java",
+            "AWS"
+            };
+
+                for (int i = 0; i < technologies.Count; i++)
+                {
+                    string tech = technologies[i];
+                    Skills? objSkill = Model?.skills?.FirstOrDefault(x => x.SkillName.ToLower() == tech.ToLower());
+
+                    <div class="row techExperienceContainer" techExperience="@tech" techExp-index="@i">
+                        <div class="col d-flex align-items-center">
+                            <div>
+                                <input @(objSkill != null ? "checked" : "") type="checkbox" id="@("cb" + i + tech)" onchange="techExperienceChange(@i,'@tech',this)" />
+                            </div>
+                            <div class="ms-2">
+                                @tech
+                            </div>
+                        </div>
+                        <div class="col d-flex align-items-center">
+                            <div>
+                                <input @(objSkill != null ? "" : "disabled") @(objSkill?.SkillRate == 1 ? "checked" : "") type="radio" value="1" name="@("techName" + i + tech)" />
+                            </div>
+                            <div class="ms-2">
+                                Beginner
+                            </div>
+                        </div>
+                        <div class="col d-flex align-items-center">
+                            <div>
+                                <input @(objSkill != null ? "" : "disabled") @(objSkill?.SkillRate == 2 ? "checked" : "") type="radio" value="2" name="@("techName" + i + tech)" />
+                            </div>
+                            <div class="ms-2">
+                                Intermediate
+                            </div>
+                        </div>
+                        <div class="col d-flex align-items-center">
+                            <div>
+                                <input type="radio" value="3" name="@("techName"+i+tech)" @(objSkill?.SkillRate == 3 ? "checked" : "") @(objSkill != null ? "" : "disabled") />
+                            </div>
+                            <div class="ms-2">
+                                Expert
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <div class="w-100 mb-3">
+        <div>
+            <h5>Preference</h5>
+        </div>
+        <hr />
+        <div class="mb-3">
+            <div>
+                <label>Preferred Location</label>
+            </div>
+            <div>
+                <select class="form-control" id="inpLocation" asp-for="application.PreferredLocation">
+                    <option value="NoLocation">Select Location</option>
+                    <option value="Location1">Location1</option>
+                    <option value="Location2">Location2</option>
+                    <option value="Location3">Location3</option>
+                    <option value="Location4">Location4</option>
+                </select>
+            </div>
+
+        </div>
+        <div class="mb-3">
+            <div>
+                <label>Expected CTC</label>
+            </div>
+            <div>
+                <input class="form-control" type="text" placeholder="Expected CTC" id="inpECTC" asp-for="application.ECTC" />
+            </div>
+            <span class="text-danger" id="errorECTC"></span>
+        </div>
+
+        <div class="mb-3">
+            <div>
+                <label>Current CTC</label>
+            </div>
+            <div>
+                <input class="form-control" type="text" placeholder="Current CTC" id="inpCCTC" asp-for="application.CCTC" />
+            </div>
+            <span class="text-danger" id="errorCCTC"></span>
+        </div>
+        <div class="mb-3">
+            <div>
+                <label>Notice Period (days)</label>
+            </div>
+            <div>
+                <input class="form-control" type="number" placeholder="Notice Period" id="inpNoticePeriod" asp-for="application.Notice" />
+            </div>
+            <span class="text-danger" id="errorNoticePeriod"></span>
+        </div>
+    </div>
+    <div>
+        <button type="button" class="btn btn-info" onclick="validateAndSaveData()">Save Application</button>
+    </div>
+</div>
+<div id="tempEducationDetails" class="d-none">
+    <div class="d-flex flex-wrap justify-content-between educationDetailsContainer mb-3">
+        <div class="mx-2 flex-grow-1">
+            <div>
+                <label>Board/University</label>
+            </div>
+            <div>
+                <input type="text" class="form-control inpBoardUniversity" placeholder="Board/University" />
+            </div>
+        </div>
+        <div class="mx-2">
+            <div>
+                <label>Year</label>
+            </div>
+            <div>
+                <input type="number" class="form-control inpYear" placeholder="Year" />
+            </div>
+        </div>
+        <div class="mx-2">
+            <div>
+                <label>CGPA/Percentage</label>
+            </div>
+            <div>
+                <input type="text" class="form-control inpCGPA" placeholder="CGPA/Percentage" />
+            </div>
+        </div>
+        <div class="mx-2">
+            <div>
+                <label style="visibility:hidden;">-</label>
+            </div>
+            <div>
+                <button type="button" class="btn btn-danger" onclick="removeEducationDetailsContainer(this)">Delete</button>
+            </div>
+        </div>
+        <div class="w-100">
+            <span class="text-danger"></span>
+        </div>
+    </div>
+</div>
+
+<div id="tempWorkExperience" class="d-none">
+    <div class="d-flex flex-wrap justify-content-between workExperienceContainer mb-3">
+        <div class="mx-2 flex-grow-1">
+            <div>
+                <label>Company</label>
+            </div>
+            <div>
+                <input type="text" class="form-control inpWorkCompany" placeholder="Company" />
+            </div>
+        </div>
+        <div class="mx-2">
+            <div>
+                <label>Designation</label>
+            </div>
+            <div>
+                <input type="text" class="form-control inpWorkDesignation" placeholder="Designation" />
+            </div>
+        </div>
+        <div class="mx-2">
+            <div>
+                <label>From</label>
+            </div>
+            <div>
+                <input type="date" class="form-control inpWorkFrom" />
+            </div>
+        </div>
+        <div class="mx-2">
+            <div>
+                <label>To</label>
+            </div>
+            <div>
+                <input type="date" class="form-control inpWorkTo" />
+            </div>
+        </div>
+        <div class="mx-2">
+            <div>
+                <label style="visibility:hidden;">-</label>
+            </div>
+            <div>
+                <button type="button" class="btn btn-danger" onclick="removeWorkExperienceContainer(this)">Delete</button>
+            </div>
+        </div>
+        <div class="w-100">
+            <span class="text-danger"></span>
+        </div>
+    </div>
+</div>
+@section Scripts {
+
+    <script src="~/js/applicationform.js"></script>
+
+}
+
+@section Styles {
+
+}
